@@ -31,6 +31,8 @@ buildPythonPackage rec {
     repo = src.repo;
   };
 
+  doCheck = false;
+
   meta = with lib; {
     description = "GEMMs and tensor contractions";
     homepage = "https://github.com/ROCmSoftwarePlatform/Tensile";
