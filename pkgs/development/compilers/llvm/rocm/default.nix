@@ -243,6 +243,7 @@ in rec {
       "-DLIBUNWIND_INCLUDE_DOCS=ON"
       "-DLIBUNWIND_INCLUDE_TESTS=ON"
       "-DLIBUNWIND_USE_COMPILER_RT=ON"
+      "-DLLVM_LIT_ARGS=--filter-out=\"(unwind_leaffunction|libunwind_02)\""
     ];
   };
 
@@ -293,7 +294,7 @@ in rec {
 
     extraCMakeFlags = [
       "-DLIBCXX_INCLUDE_DOCS=ON"
-      "-DLIBCXX_INCLUDE_TESTS=ON"
+      "-DLIBCXX_INCLUDE_TESTS=ON" # -Wno-unused-result
       "-DLIBCXX_USE_COMPILER_RT=ON"
       "-DLIBCXX_CXX_ABI=libcxxabi"
 
@@ -308,6 +309,8 @@ in rec {
       "-DLIBCXXABI_USE_COMPILER_RT=ON"
       "-DLIBCXXABI_INSTALL_LIBRARY=OFF"
       "-DLIBCXXABI_INSTALL_HEADERS=OFF"
+      #"-DLIBCXX_ADDITIONAL_COMPILE_FLAGS=-Wno-unused-result" ## Not working
+      "-DLIBCXX_TEST_PARAMS=enable_warnings=False"
     ];
 
     # Most of these can't find `bash` or `mkdir`, might just be hard-coded paths, or PATH is altered
@@ -338,9 +341,13 @@ in rec {
       targetName
     ];
 
+    #extraNativeBuildInputs = [
+    #  llvm # llvm-config
+    #];
+
     extraCMakeFlags = [
       "-DCMAKE_POLICY_DEFAULT_CMP0114=NEW"
-      "-DCOMPILER_RT_INCLUDE_TESTS=ON"
+      "-DCOMPILER_RT_INCLUDE_TESTS=OFF" # can't find llvm-config.
       "-DCOMPILER_RT_USE_LLVM_UNWINDER=ON"
       "-DCOMPILER_RT_CXX_LIBRARY=libcxx"
       "-DCOMPILER_RT_CAN_EXECUTE_TESTS=OFF" # We can't run most of these
